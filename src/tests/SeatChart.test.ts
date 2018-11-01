@@ -1,8 +1,11 @@
-import SeatChart, { Seat } from '../SeatChart';
+import SeatChart from '../SeatChart';
+import Seat from '../Seat';
 
 describe('SeatChart', () => {
   let Chart;
   beforeAll(() => {
+    // be aware we are making changes to this class with these tests so they can effect the output of other tests
+    // if you would like to utilize a hook that creates a new instance before each test use beforeEach
     Chart = new SeatChart(3, 11);
   })
   it('should create instance of SeatChart', () => {
@@ -34,7 +37,7 @@ describe('SeatChart', () => {
     expect(Chart.getSeat(0, 5).reserved).toBeFalsy();
   });
   it('should contain getBestSeats method that indicates the best possible seats available', () => {
-    expect(Chart.getBestSeats(4)).toBe("R1C6 - R1C10");
-    expect(Chart.getBestSeats(7)).toBe("R2C4 - R2C11");
+    expect(Chart.getBestSeats(4)).toBe("R1C6 - R1C9");
+    expect(Chart.getBestSeats(7)).toBe("R2C4 - R2C10");
   });
 });

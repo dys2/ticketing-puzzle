@@ -4,7 +4,7 @@ import {
   getAllReservationCoordinates,
   getReservationCoordinates,
   reservationValidations
-} from './utilities';
+} from './helpers';
 
 const readline = require('readline');
 
@@ -20,7 +20,7 @@ const rl = readline.createInterface({
 
 
 export const initReservations = () => {
-	rl.question('What are the initial reservations?', (reservations: string) => {
+	rl.question('', (reservations: string) => {
 		const arr = reservations.split(' ');
 		const valid = reservationValidations(arr, rows, seats);
 		if (!valid) {
@@ -31,8 +31,6 @@ export const initReservations = () => {
 			const seat = Chart.getSeat(coordinate[0], coordinate[1]);
 			seat.reserved = true;
 		});
-		return;
-
 	});
 }
 
@@ -41,6 +39,7 @@ export const seatFinder = () => {
 	rl.on('line', (input:string) => {
 		if (input === "EOF") {
       // must still get total reserved seats
+      console.log(Chart.reservedSeatsCount);
       rl.close();
       return;
 		}

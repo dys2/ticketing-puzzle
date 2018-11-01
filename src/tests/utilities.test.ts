@@ -3,7 +3,7 @@ import {
   getMDistance,
   getReservationCoordinates,
   reservationValidations
-} from '../utilities';
+} from '../helpers';
 
 describe('getMDistance', () => {
   it('should return the Manhatton Distance given row seat idealRow and IdealSeat', () => {

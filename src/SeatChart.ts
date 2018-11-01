@@ -1,4 +1,4 @@
-import { getMDistance } from './utilities';
+import { getMDistance, lowestConsecutiveScoreIndex } from './helpers';
 import Seat from './Seat';
 
 /* 
@@ -24,10 +24,20 @@ export default class SeatChart {
 
 	get chart(): Seat[][] {
 		return this._chart;
-	}
+  }
+  
+  get reservedSeatsCount(): number {
+    return this._chart.reduce(
+      (acc, row) =>
+        row.reduce(
+          (acc, seat: Seat) => seat.reserved ? acc + 1 : acc,
+          0
+        ) + acc,
+        0
+    )
+  }
 
 	setChart(rows: number, seats: number) {
-
 		this._chart = new Array(rows)
 			.fill(0)
 			.map((_, row) =>
@@ -45,8 +55,6 @@ export default class SeatChart {
 	isReserved = (row: number, seat: number): boolean =>
     this._chart[row][seat].reserved;
     
-  
-
   getBestSeats(seats: number): string {
     if (seats < 1) return "Must select at least one seat";
     if (seats > 10) return "No more than 10 consecutive seats at a time";
@@ -74,49 +82,5 @@ export default class SeatChart {
 
 		return "Not Available";
   }
-
-  get reservedSeatsCount(): number {
-    return this._chart.reduce(
-      (acc, row) =>
-        row.reduce(
-          (acc, seat: Seat) => seat.reserved ? ++acc : acc,
-          0
-        ) + acc,
-        0
-    )
-  }
-}
-
-
-
-interface LowestConsecutiveScoreIndexInterface {
-  startSeat:number;
-  score:number;
-}
-
-// outputs the startSeat and score of the rows best consecutive score
-export const lowestConsecutiveScoreIndex = (num: number = 1, seats: Seat[]): LowestConsecutiveScoreIndexInterface => {
-	let score: number = Infinity;
-	let startSeat: number = -1;
-
-	for (let i = 0; i <= seats.length - num; i++) {
-		let sum = 0;
-    let valid = true;
-
-    // add up the consecutive score at each index but make sure the seats are not reserved
-		for (let j = 0; j < num; j++) {
-			const seat = seats[i + j];
-			if (seat.reserved) valid = false;
-			sum += seat.manhattanDistance;
-    }
-    
-    if (valid && sum < score) {
-			score = sum;
-			startSeat = i;
-    };
-    
-  }
   
-	return { startSeat, score };
 }
-
