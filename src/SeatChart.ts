@@ -1,36 +1,5 @@
 import { getMDistance } from './utilities';
-
-
-interface SeatInterface {
-	reserved: boolean;
-	manhattanDistance: number;
-}
-
-
-/*
-Seat
-mDistance: number
-*/
-export class Seat implements SeatInterface {
-	private _reserved = false;
-	private _manhattanDistance = 0;
-
-	constructor(mDistance: number) {
-		this._manhattanDistance = mDistance;
-	}
-
-	set reserved(isReserved: boolean) {
-		this._reserved = isReserved;
-	}
-
-	get reserved(): boolean {
-		return this._reserved;
-	}
-
-	get manhattanDistance(): number {
-		return this._manhattanDistance;
-	}
-}
+import Seat from './Seat';
 
 /* 
 SeatChart
@@ -84,7 +53,6 @@ export default class SeatChart {
     
 		const consecutive = this.chart.reduce(
 			(acc, row, rowI) => {
-
         // get the current rows best score
         const rowScore = lowestConsecutiveScoreIndex(seats, row);
         
@@ -111,7 +79,7 @@ export default class SeatChart {
     return this._chart.reduce(
       (acc, row) =>
         row.reduce(
-          (acc, seat: SeatInterface) => seat.reserved ? ++acc : acc,
+          (acc, seat: Seat) => seat.reserved ? ++acc : acc,
           0
         ) + acc,
         0
@@ -127,7 +95,7 @@ interface LowestConsecutiveScoreIndexInterface {
 }
 
 // outputs the startSeat and score of the rows best consecutive score
-export const lowestConsecutiveScoreIndex = (num: number = 1, seats: SeatInterface[]): LowestConsecutiveScoreIndexInterface => {
+export const lowestConsecutiveScoreIndex = (num: number = 1, seats: Seat[]): LowestConsecutiveScoreIndexInterface => {
 	let score: number = Infinity;
 	let startSeat: number = -1;
 
