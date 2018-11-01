@@ -7,7 +7,6 @@ interface SeatInterface {
 }
 
 
-
 /*
 Seat
 mDistance: number
@@ -77,9 +76,11 @@ export default class SeatChart {
 	isReserved = (row: number, seat: number): boolean =>
     this._chart[row][seat].reserved;
     
+  
 
   getBestSeats(seats: number): string {
-    if (seats >= 10) return "No more than 10 consecutive seats at a time";
+    if (seats < 1) return "Must select at least one seat";
+    if (seats > 10) return "No more than 10 consecutive seats at a time";
     
 		const consecutive = this.chart.reduce(
 			(acc, row, rowI) => {
@@ -98,11 +99,24 @@ export default class SeatChart {
     // If we found consecutive seats
 		if (consecutive.score < Infinity) {
 			this.setConsecutiveSeats(consecutive.row, consecutive.startSeat, seats);
-			return `R${consecutive.row + 1}C${consecutive.startSeat + 1} - R${consecutive.row + 1}C${consecutive.startSeat + seats + 1}`;
+      return seats === 1 ?
+        `R${consecutive.row + 1}C${consecutive.startSeat + 1}` :
+        `R${consecutive.row + 1}C${consecutive.startSeat + 1} - R${consecutive.row + 1}C${consecutive.startSeat + seats}`;
 		}
 
 		return "Not Available";
-	}
+  }
+
+  get reservedSeatsCount(): number {
+    return this._chart.reduce(
+      (acc, row) =>
+        row.reduce(
+          (acc, seat: SeatInterface) => seat.reserved ? ++acc : acc,
+          0
+        ) + acc,
+        0
+    )
+  }
 }
 
 
