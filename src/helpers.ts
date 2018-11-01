@@ -19,6 +19,7 @@ export const reservationValidations = (arr: string[], rows: number, seats: numbe
 export const getAllReservationCoordinates = (reservations: string): number[][] =>
   reservations
     .split(' ')
+    .filter(str => str !== "")
     .map(getReservationCoordinates);
 
 
