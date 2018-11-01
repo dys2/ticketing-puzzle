@@ -1,4 +1,7 @@
-import SeatChart from './SeatChart';
+import {
+  initReservations,
+  seatFinder
+} from './driver';
 
-const chart = new SeatChart(3, 11);
-console.log(chart);
+initReservations();
+seatFinder();

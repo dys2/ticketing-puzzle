@@ -26,7 +26,7 @@ Upon EOF, output the number of remaining available seats
 ### Additional User Acceptance Criteria:
 * Always try to reserve the best available block of seats using the Manhattan Distance
 * Should be flexible enough so that it can work well with a variable number of seats and rows
-* The maximum number of tickets someone can request for the example is 10
+* The maximum number of tickets someone can request for is 10
 * Return the best available group as efficiently as possible
 * Seat reservations cannot span more than one row
 
