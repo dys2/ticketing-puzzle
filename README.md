@@ -58,7 +58,7 @@ Not Available
 * I believe the last output on the sample output is wrong.  It looks like only 16 seats should have been added.
 * I added a few unit tests but didn't go overboard with them just to get the idea
 * I'm sure there are more optimized solutions but I went for a solution that is good enough and manageable
-* In order to change from the default seating row and seat amount simple pass the numbers in after npm start
+* In order to change from the default seating row and seat amount pass the numbers in after npm start
 
 ### Future Considerations
 * The helpers file could easily get out of control if the application were to scale.  In that case I would recommend factoring it out.
