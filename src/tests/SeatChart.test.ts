@@ -1,4 +1,4 @@
-import SeatChart, {Seat} from '../SeatChart';
+import SeatChart, { Seat } from '../SeatChart';
 
 describe('SeatChart', () => {
   let Chart;
@@ -24,5 +24,17 @@ describe('SeatChart', () => {
     expect(Chart.isReserved(1, 2)).toBeFalsy();
     Chart.getSeat(1, 2).reserved = true;
     expect(Chart.isReserved(1, 2)).toBeTruthy();
+  });
+  it('should contain setConsecutiveSeats method that sets reserved consecutive seats', () => {
+    expect(Chart.getSeat(0, 2).reserved).toBeFalsy();
+    Chart.setConsecutiveSeats(0, 2, 3);
+    expect(Chart.getSeat(0, 2).reserved).toBeTruthy();
+    expect(Chart.getSeat(0, 3).reserved).toBeTruthy();
+    expect(Chart.getSeat(0, 4).reserved).toBeTruthy();
+    expect(Chart.getSeat(0, 5).reserved).toBeFalsy();
+  });
+  it('should contain getBestSeats method that indicates the best possible seats available', () => {
+    expect(Chart.getBestSeats(4)).toBe("R1C6 - R1C10");
+    expect(Chart.getBestSeats(7)).toBe("R2C4 - R2C11");
   });
 });

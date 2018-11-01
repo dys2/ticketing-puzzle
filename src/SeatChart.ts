@@ -46,7 +46,13 @@ export default class SeatChart {
 
 	private _chart:Seat[][];
 
-	private idealSeat: number;
+  private idealSeat: number;
+  
+  private setConsecutiveSeats = (row: number, startSeat: number, num: number) => {
+		for (let i = 0; i < num; i++) {
+			this.getSeat(row, startSeat + i).reserved = true;
+		}
+	}
 
 	get chart(): Seat[][] {
 		return this._chart;
@@ -69,6 +75,66 @@ export default class SeatChart {
     this.chart[row][seat];
 
 	isReserved = (row: number, seat: number): boolean =>
-		this._chart[row][seat].reserved;
+    this._chart[row][seat].reserved;
+    
 
+  getBestSeats(seats: number): string {
+    if (seats >= 10) return "No more than 10 consecutive seats at a time";
+    
+		const consecutive = this.chart.reduce(
+			(acc, row, rowI) => {
+
+        // get the current rows best score
+        const rowScore = lowestConsecutiveScoreIndex(seats, row);
+        
+        // means there were no matches
+        if (rowScore.startSeat === - 1) return acc;
+        
+				return acc.score <= rowScore.score ? acc : {...rowScore, row: rowI};
+			},
+			{score: Infinity, row: 0, startSeat: 0}
+		);
+
+    // If we found consecutive seats
+		if (consecutive.score < Infinity) {
+			this.setConsecutiveSeats(consecutive.row, consecutive.startSeat, seats);
+			return `R${consecutive.row + 1}C${consecutive.startSeat + 1} - R${consecutive.row + 1}C${consecutive.startSeat + seats + 1}`;
+		}
+
+		return "Not Available";
+	}
 }
+
+
+
+interface LowestConsecutiveScoreIndexInterface {
+  startSeat:number;
+  score:number;
+}
+
+// outputs the startSeat and score of the rows best consecutive score
+export const lowestConsecutiveScoreIndex = (num: number = 1, seats: SeatInterface[]): LowestConsecutiveScoreIndexInterface => {
+	let score: number = Infinity;
+	let startSeat: number = -1;
+
+	for (let i = 0; i <= seats.length - num; i++) {
+		let sum = 0;
+    let valid = true;
+
+    // add up the consecutive score at each index but make sure the seats are not reserved
+		for (let j = 0; j < num; j++) {
+			const seat = seats[i + j];
+			if (seat.reserved) valid = false;
+			sum += seat.manhattanDistance;
+    }
+    
+    if (valid && sum < score) {
+			score = sum;
+			startSeat = i;
+    };
+    
+  }
+  
+	return { startSeat, score };
+}
+
